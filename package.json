@@ -1,0 +1,11 @@
+{
+  "name": "mdtohtml",
+  "version": "1.0.0",
+  "description": "convert .md to Html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jan Barfuß",
+  "license": "ISC"
+}

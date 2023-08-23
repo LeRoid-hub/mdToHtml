@@ -1,19 +1,19 @@
-const { readFile, writeFile } = require('fs/promises');
-
-import './token.ts';
-import './tohtml.ts';
+import { readFileSync, writeFileSync } from 'fs';
+import { Token, tokenize } from './token';
+import { convert_to_html } from './tohtml';
 
 function readThisFile(filePath: string) {
         let content: string ;
 
     try {
-        const data = readFile(filePath);
+        const data = readFileSync(filePath);
         content = data.toString();
         return content; 
 
     } catch (error) {
-        console.error(`Got an error trying to read the file: ' . ${error.message}`);
+        console.error(`Got an error trying to read the file: ' . ${(error as Error).message}`);
     }
+    return "";
 }
 
 function convert (filePath: string, speichern:boolean){
@@ -22,9 +22,9 @@ function convert (filePath: string, speichern:boolean){
     let html: string = convert_to_html(tokens);
     if(speichern === true){
         try{
-            writeFile(filePath.replace(".md", ".html"), html);
+            writeFileSync(filePath.replace(".md", ".html"), html);
         } catch (error){
-            console.error(`Got an error trying to write the file: ' . ${error.message}`);
+            console.error(`Got an error trying to write the file: ' . ${(error as Error).message}`);
         }
     }
     return html;

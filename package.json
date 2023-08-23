@@ -9,6 +9,7 @@
   "author": "Jan Barfuß",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^20.5.3",
     "typescript": "^5.1.6"
   }
 }

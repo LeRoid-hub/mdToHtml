@@ -1,0 +1,124 @@
+export enum TokenType {
+    newline,
+    paragraph,
+    heading,
+    heading2,
+    heading3,
+    heading4,
+    heading5,
+    heading6,
+    blockquote,
+    code,
+    hr,
+    list,
+}
+
+export class Token {
+    type: TokenType;
+    text?: string;
+
+    constructor(type: TokenType, text?: string) {
+        this.type = type;
+        this.text = text;
+    }
+
+    getType() {
+        return this.type;
+    }
+
+    getText() {
+        return this.text;
+    }
+
+}
+
+
+export function tokenize(content: string){
+    const tokens: Token[] = [];
+
+    let currentString: string = "";
+    let newLine: boolean = true;
+    let currentState: TokenType = TokenType.newline;
+
+    for (let i = 0; i < content.length; i++) {
+        const char = content[i];
+        if (char === '\n') {
+            if(currentString === '---'){
+                currentState = TokenType.hr;
+            }
+            if(currentString  === '```'){
+                currentState = TokenType.code;
+                currentString = '';
+                newLine = false;
+                continue;
+            }
+            if(currentState === TokenType.code){
+                if(currentString.length > 3){
+                    if(currentString.substring(currentString.length - 3, currentString.length) === '```'){
+                        console.log(currentString);
+                        currentString = currentString.substring(0, currentString.length - 3);
+                        tokens.push(new Token(currentState, currentString));
+                        currentString = '';
+                        currentState = TokenType.newline;
+                        newLine = true; 
+                        console.log("huhu");
+                    }else{
+                        currentString += char;
+                    }
+                }else{
+                    currentString += char;
+                }
+            }else{
+                tokens.push(new Token(currentState, currentString));
+                currentString = '';
+                currentState = TokenType.newline;
+                newLine = true;
+            }
+        }else{
+            currentString += char;
+            if(newLine === true){
+                if(char === ' '){
+                    if(currentString.trim() === '#'){
+                        currentState = TokenType.heading;
+                        currentString = '';
+                    }else if(currentString.trim() === '##'){
+                        currentState = TokenType.heading2;
+                        currentString = '';
+                    }else if(currentString.trim() === '###'){
+                        currentState = TokenType.heading3;
+                        currentString = '';
+                    }else if(currentString.trim() === '####'){
+                        currentState = TokenType.heading4;
+                        currentString = '';
+                    }else if(currentString.trim() === '#####'){
+                        currentState = TokenType.heading5;
+                        currentString = '';
+                    }else if(currentString.trim() === '######'){
+                        currentState = TokenType.heading6;
+                        currentString = '';
+                    }else if(currentString.trim() === '>'){
+                        currentState = TokenType.blockquote;
+                        currentString = '';
+                    }else if(currentString.trim() === '```'){
+                        currentState = TokenType.code;
+                        currentString = '';
+                    }else if(currentString.trim() === '---'){
+                        currentState = TokenType.hr;
+                    }else {
+                        currentState = TokenType.paragraph;
+                    }
+                    newLine = false;
+                }
+
+            }
+
+
+        }
+
+    }
+    return tokens;
+}
+
+
+
+

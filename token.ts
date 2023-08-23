@@ -48,10 +48,13 @@ function tokenize(content: string){
                 if(char === ' '){
                     if(currentString === '#'){
                         currentState = TokenType.heading;
+                        currentString = '';
                     }else if(currentString === '>'){
                         currentState = TokenType.blockquote;
+                        currentString = '';
                     }else if(currentString === '```'){
                         currentState = TokenType.code;
+                        currentString = '';
                     }else if(currentString === '---'){
                         currentState = TokenType.hr;
                     }else {

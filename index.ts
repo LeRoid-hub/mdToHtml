@@ -1,26 +1,34 @@
-const { readFile } = require('fs/promises');
+const { readFile, writeFile } = require('fs/promises');
 
 import './token.ts';
+import './tohtml.ts';
 
-
-async function readThisFile(filePath: string) {
+function readThisFile(filePath: string) {
+        let content: string ;
 
     try {
-        const data = await readFile(filePath);
-        let stringdata = data.toString();
-        console.log(stringdata);
-        
-        let token:Token[] = tokenize(stringdata);
-        convert_to_html(token);
-
-
+        const data = readFile(filePath);
+        content = data.toString();
+        return content; 
 
     } catch (error) {
         console.error(`Got an error trying to read the file: ' . ${error.message}`);
     }
 }
 
+function convert (filePath: string, speichern:boolean){
+    let content: string = readThisFile(filePath);
+    let tokens: Token[] = tokenize(content);
+    let html: string = convert_to_html(tokens);
+    if(speichern === true){
+        try{
+            writeFile(filePath.replace(".md", ".html"), html);
+        } catch (error){
+            console.error(`Got an error trying to write the file: ' . ${error.message}`);
+        }
+    }
+    return html;
+}
 
 
-
-readThisFile('./test.md');
+convert('./test.md', true);

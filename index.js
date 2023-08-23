@@ -52,7 +52,6 @@ function markdownToHtml(markdown) {
     //Replace Links
     markdown = markdown.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
 
-
     //Replace New Lines
     markdown = markdown.replace(/\n/g, '<br>');
     console.log(markdown);

@@ -41,6 +41,10 @@ export class Token {
 
 }
 
+function lastWord(str: string) {
+    const words = str.split(' ');
+    return words[words.length - 1];
+}
 
 export function tokenize(content: string){
     const tokens: Token[] = [];
@@ -128,14 +132,22 @@ export function tokenize(content: string){
                 }
 
 
-            }else if(currentState === TokenType.unordered_list && char === ' '){
-                if (currentString.trim() === '[]'){
+            }else if (char === ' '){
+                if(currentState === TokenType.unordered_list && currentString.trim() === '[ ]'){
                     currentState = TokenType.task;
                     currentString = '';
-                }else if(currentString.trim() === '[x]'){
+                }else if(currentState === TokenType.unordered_list && currentString.trim() === '[x]'){
                     currentState = TokenType.task_checked;
                     currentString = '';
-                }
+                }else if(lastWord(currentString).charAt(0) === '*' && lastWord(currentString).length > 1){
+                    tokens.push(new Token(currentState, currentString.substring(0, currentString.length - lastWord(currentString).length)));
+                    currentState = TokenType.italic;
+                    currentString = lastWord(currentString).substring(1, lastWord(currentString).length);
+                }else if(currentString.trim().charAt(currentString.length) === '*' && currentString.trim().length > 1){
+                    tokens.push(new Token(currentState, currentString.substring(0, currentString.length - 1)));
+                    currentState = tokens.at(-1).getType();
+                    currentString = ''
+
             }
 
 

@@ -15,6 +15,11 @@ export enum TokenType {
     task,
     task_checked,
     bold,
+    italic,
+    strikethrough,
+    link,
+    image,
+
 }
 
 export class Token {
@@ -79,7 +84,6 @@ export function tokenize(content: string){
             }
         }else{
             currentString += char;
-            //TODO: fix checkboxes - [] and - [x]
             if(newLine === true){
                 if(char === ' ' && currentString.trim().length >0){
                     if(currentString.trim() === '#'){
@@ -123,6 +127,15 @@ export function tokenize(content: string){
                     newLine = false;
                 }
 
+
+            }else if(currentState === TokenType.unordered_list && char === ' '){
+                if (currentString.trim() === '[]'){
+                    currentState = TokenType.task;
+                    currentString = '';
+                }else if(currentString.trim() === '[x]'){
+                    currentState = TokenType.task_checked;
+                    currentString = '';
+                }
             }
 
 

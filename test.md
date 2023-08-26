@@ -19,5 +19,5 @@ Ich mag gerne:
 
  [[asdasd]]
 
- -[] asdasd
- -[x] ajsdljas
+- [] asdasd
+ - [x] ajsdljas

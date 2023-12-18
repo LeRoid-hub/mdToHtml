@@ -145,8 +145,9 @@ export function tokenize(content: string){
                     currentString = lastWord(currentString).substring(1, lastWord(currentString).length);
                 }else if(currentString.trim().charAt(currentString.length) === '*' && currentString.trim().length > 1){
                     tokens.push(new Token(currentState, currentString.substring(0, currentString.length - 1)));
-                    currentState = tokens.at(-1).getType();
+                        currentState = tokens?.at(-1)?.getType() ?? TokenType.paragraph;
                     currentString = ''
+                }
 
             }
 
